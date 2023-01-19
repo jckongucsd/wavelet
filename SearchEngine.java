@@ -11,35 +11,33 @@ class Handler implements URLHandler {
         if (url.getPath().equals("/")) {
             String result = "";
             for(int i = 0; i < wordBank.length; i++){
-                result += wordBank[i];
+                if (wordBank[i] != null) {
+                    result += wordBank[i];
+                    result += ", ";
+                }
             }
-            return String.format("Search results: %s", result);
+            return String.format("Word Bank: %s", result);
         } else if (url.getPath().contains("/search")) {
                 String[] parameters = url.getQuery().split("=");
                 if (parameters[0].equals("word")) {
-                    String wordToSearch = String.parseString(parameters[1]);
+                    System.out.println("Here");
+                    String wordToSearch = parameters[1];
                     boolean found = false;
                     for (int i=0; i < wordBank.length; i++) {
-                        if (wordBank[i] == wordToSearch) {
-                            found = true;
+                        if (wordBank[i].equals(wordToSearch)) {
+                            System.out.println("word found");
+                            return String.format("%s is found in the word bank", wordToSearch);
                         }
                     }
-                    if (found) {
-                        return String.format("%s is found in the word bank", wordToSearch);
-                    } else {
-                        return String.format("%s is not found...", wordToSearch);
-                    }
+                    return String.format("%s is not found...", wordToSearch);
                 }
-
-
-
-            return String.format("Number incremented!");
+                return "Error";
         } else {
             System.out.println("Path: " + url.getPath());
             if (url.getPath().contains("/add")) {
                 String[] parameters = url.getQuery().split("=");
                 if (parameters[0].equals("word")) {
-                    String newWord = String.parseString(parameters[1]);
+                    String newWord = parameters[1];
                     wordBank[num] = newWord;
                     num += 1;
                     return String.format(" %s is added to word-bank!", parameters[1]);
